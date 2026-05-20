@@ -1,0 +1,25 @@
+:root {
+  --bg: #ffffff;
+  --card: #f5f5f5;
+  --text: #111111;
+}
+
+body.dark {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #ffffff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body.dark .card,
+body.dark .chart-card,
+body.dark .metric-card,
+body.dark .navbar,
+body.dark .filter-bar {
+  background: var(--card) !important;
+  color: var(--text) !important;
+}

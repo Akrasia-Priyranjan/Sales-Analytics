@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Sales Analytics</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: #080812;
+        color: white;
+        min-height: 100vh;
+      }
+
+      .navbar {
+        background: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo {
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      .nav-brand h1 {
+        font-size: 17px;
+        font-weight: 700;
+      }
+      .nav-right {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .btn-back {
+        padding: 6px 14px;
+        background: rgba(129, 140, 248, 0.15);
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        color: #818cf8;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .btn-back:hover {
+        background: rgba(129, 140, 248, 0.25);
+      }
+      .logout-btn {
+        padding: 6px 14px;
+        background: rgba(240, 80, 80, 0.15);
+        border: 1px solid rgba(240, 80, 80, 0.3);
+        color: #ff6b6b;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+      }
+
+      .main {
+        padding: 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .page-title {
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 6px;
+        background: linear-gradient(135deg, #818cf8, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .page-sub {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 28px;
+      }
+
+      /* Stats */
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+      .stat-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        padding: 18px 20px;
+        text-align: center;
+      }
+      .stat-box .num {
+        font-size: 28px;
+        font-weight: 800;
+        color: #818cf8;
+        margin-bottom: 4px;
+      }
+      .stat-box .lbl {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* Add User Form */
+      .section {
+        background: rgba(255, 255, 255, 0.025);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+        padding: 22px 24px;
+        margin-bottom: 20px;
+      }
+      .section-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .form-group label {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      .form-group input,
+      .form-group select {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-family: "Inter", sans-serif;
+        transition: all 0.2s;
+      }
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #818cf8;
+        background: rgba(255, 255, 255, 0.09);
+      }
+      .form-group select option {
+        background: #1e1b4b;
+      }
+      .form-group input::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      .add-btn {
+        padding: 10px 22px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+        transition: all 0.2s;
+      }
+      .add-btn:hover {
+        opacity: 0.85;
+        transform: translateY(-1px);
+      }
+
+      /* Alert */
+      .alert {
+        display: none;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-top: 12px;
+      }
+      .alert.success {
+        background: rgba(52, 211, 153, 0.1);
+        border: 1px solid rgba(52, 211, 153, 0.3);
+        color: #34d399;
+      }
+      .alert.error {
+        background: rgba(248, 113, 113, 0.1);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        color: #f87171;
+      }
+
+      /* Users Table */
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      thead tr {
+        background: rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      th {
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      td {
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.8);
+      }
+      tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .role-badge {
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .role-admin {
+        background: rgba(129, 140, 248, 0.15);
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        color: #818cf8;
+      }
+      .role-viewer {
+        background: rgba(251, 191, 36, 0.1);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        color: #fbbf24;
+      }
+
+      .del-btn {
+        padding: 5px 12px;
+        background: rgba(248, 113, 113, 0.1);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        color: #f87171;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+        transition: all 0.2s;
+      }
+      .del-btn:hover {
+        background: rgba(248, 113, 113, 0.2);
+      }
+      .del-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      @media (max-width: 768px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .stat-row {
+          grid-template-columns: 1fr;
+        }
+        .main {
+          padding: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <div class="nav-brand">
+        <div class="logo">⚙️</div>
+        <div>
+          <h1>Admin Panel</h1>
+        </div>
+      </div>
+      <div class="nav-right">
+        <a href="/dashboard" class="btn-back">← Dashboard</a>
+        <button class="logout-btn" onclick="doLogout()">Logout</button>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="page-title">👤 User Management</div>
+      <div class="page-sub">Manage users and their access roles</div>
+
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="num" id="totalUsers">—</div>
+          <div class="lbl">Total Users</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="adminCount">—</div>
+          <div class="lbl">Admins</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="viewerCount">—</div>
+          <div class="lbl">Viewers</div>
+        </div>
+      </div>
+
+      <!-- Add User -->
+      <div class="section">
+        <div class="section-title">➕ Add New User</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="newUsername" placeholder="e.g. john123" />
+          </div>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="newName" placeholder="e.g. John Doe" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="newEmail" placeholder="john@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              id="newPassword"
+              placeholder="Min 6 characters"
+            />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select id="newRole">
+              <option value="viewer">👁️ Viewer</option>
+              <option value="admin">⚙️ Admin</option>
+            </select>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addUser()">➕ Add User</button>
+        <div class="alert" id="addAlert"></div>
+      </div>
+
+      <!-- Users List -->
+      <div class="section">
+        <div class="section-title">👥 All Users</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="usersTable">
+              <tr>
+                <td
+                  colspan="6"
+                  style="text-align: center; color: rgba(255, 255, 255, 0.3)"
+                >
+                  Loading...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Security check
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+
+      if (!token || role !== "admin") {
+        alert("🔒 Admin access only!");
+        window.location.href = "/";
+      }
+
+      function doLogout() {
+        localStorage.clear();
+        window.location.href = "/";
+      }
+
+      // Load users
+      function loadUsers() {
+        fetch("/api/users", {
+          headers: { Authorization: "Bearer " + token },
+        })
+          .then((r) => r.json())
+          .then((users) => {
+            // Stats
+            document.getElementById("totalUsers").textContent = users.length;
+            document.getElementById("adminCount").textContent = users.filter(
+              (u) => u.role === "admin",
+            ).length;
+            document.getElementById("viewerCount").textContent = users.filter(
+              (u) => u.role === "viewer",
+            ).length;
+
+            // Table
+            const tbody = document.getElementById("usersTable");
+            tbody.innerHTML = users
+              .map(
+                (u) => `
+        <tr>
+          <td><b>${u.username}</b></td>
+          <td>${u.name}</td>
+          <td>${u.email}</td>
+          <td>
+            <span class="role-badge ${u.role === "admin" ? "role-admin" : "role-viewer"}">
+              ${u.role === "admin" ? "⚙️ Admin" : "👁️ Viewer"}
+            </span>
+          </td>
+          <td>${u.created}</td>
+          <td>
+            <button class="del-btn"
+              ${u.username === "admin" ? "disabled" : ""}
+              onclick="deleteUser('${u.username}')">
+              🗑️ Delete
+            </button>
+          </td>
+        </tr>
+      `,
+              )
+              .join("");
+          });
+      }
+
+      // Add user
+      function addUser() {
+        const username = document.getElementById("newUsername").value.trim();
+        const name = document.getElementById("newName").value.trim();
+        const email = document.getElementById("newEmail").value.trim();
+        const password = document.getElementById("newPassword").value.trim();
+        const role = document.getElementById("newRole").value;
+
+        if (!username || !name || !email || !password) {
+          showAlert("addAlert", "❌ All fields required!", "error");
+          return;
+        }
+        if (password.length < 6) {
+          showAlert("addAlert", "❌ Password min 6 characters!", "error");
+          return;
+        }
+
+        fetch("/api/users/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ username, name, email, password, role }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.success) {
+              showAlert("addAlert", "✅ User added successfully!", "success");
+              document.getElementById("newUsername").value = "";
+              document.getElementById("newName").value = "";
+              document.getElementById("newEmail").value = "";
+              document.getElementById("newPassword").value = "";
+              loadUsers();
+            } else {
+              showAlert("addAlert", "❌ " + data.error, "error");
+            }
+          });
+      }
+
+      // Delete user
+      function deleteUser(username) {
+        if (!confirm(`Delete user "${username}"?`)) return;
+
+        fetch("/api/users/delete", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ username }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.success) {
+              loadUsers();
+            } else {
+              alert("❌ " + data.error);
+            }
+          });
+      }
+
+      function showAlert(id, msg, type) {
+        const el = document.getElementById(id);
+        el.textContent = msg;
+        el.className = "alert " + type;
+        el.style.display = "block";
+        setTimeout(() => {
+          el.style.display = "none";
+        }, 3000);
+      }
+
+      loadUsers();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Analytics</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #f093fb 100%
+        );
+        background-size: 400% 400%;
+        animation: bgMove 8s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      @keyframes bgMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Floating Products */
+      .product {
+        position: fixed;
+        opacity: 0;
+        animation: floatUp linear infinite;
+        bottom: -150px;
+        z-index: 0;
+        pointer-events: none;
+        text-align: center;
+      }
+
+      .product .emoji {
+        font-size: 55px;
+        display: block;
+        filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+      }
+
+      .product .label {
+        display: none;
+      }
+
+      @keyframes floatUp {
+        0% {
+          bottom: -150px;
+          opacity: 0;
+          transform: rotate(0deg) translateX(0px) scale(0.8);
+        }
+        8% {
+          opacity: 1;
+        }
+        92% {
+          opacity: 1;
+        }
+        100% {
+          bottom: 110vh;
+          opacity: 0;
+          transform: rotate(25deg) translateX(60px) scale(1.1);
+        }
+      }
+
+      .p1 {
+        left: 3%;
+        animation-duration: 11s;
+        animation-delay: 0s;
+      }
+      .p2 {
+        left: 10%;
+        animation-duration: 9s;
+        animation-delay: 1.5s;
+      }
+      .p3 {
+        left: 18%;
+        animation-duration: 13s;
+        animation-delay: 3s;
+      }
+      .p4 {
+        left: 26%;
+        animation-duration: 10s;
+        animation-delay: 0.5s;
+      }
+      .p5 {
+        left: 35%;
+        animation-duration: 12s;
+        animation-delay: 2s;
+      }
+      .p6 {
+        left: 44%;
+        animation-duration: 8s;
+        animation-delay: 4s;
+      }
+      .p7 {
+        left: 53%;
+        animation-duration: 14s;
+        animation-delay: 1s;
+      }
+      .p8 {
+        left: 62%;
+        animation-duration: 10s;
+        animation-delay: 3.5s;
+      }
+      .p9 {
+        left: 71%;
+        animation-duration: 9s;
+        animation-delay: 0s;
+      }
+      .p10 {
+        left: 80%;
+        animation-duration: 12s;
+        animation-delay: 2.5s;
+      }
+      .p11 {
+        left: 89%;
+        animation-duration: 11s;
+        animation-delay: 1s;
+      }
+      .p12 {
+        left: 95%;
+        animation-duration: 7s;
+        animation-delay: 4.5s;
+      }
+
+      /* Glow orbs */
+      .glow {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(70px);
+        opacity: 0.35;
+        z-index: 0;
+        animation: glowMove 6s ease-in-out infinite;
+      }
+      .g1 {
+        width: 300px;
+        height: 300px;
+        background: #ff6b6b;
+        top: -80px;
+        left: -80px;
+      }
+      .g2 {
+        width: 250px;
+        height: 250px;
+        background: #48dbfb;
+        bottom: -60px;
+        right: -60px;
+        animation-direction: reverse;
+      }
+      .g3 {
+        width: 200px;
+        height: 200px;
+        background: #feca57;
+        top: 40%;
+        right: 15%;
+        animation-duration: 8s;
+      }
+
+      @keyframes glowMove {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(20px, 20px) scale(1.1);
+        }
+      }
+
+      /* Card */
+      .card {
+        position: relative;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 24px;
+        padding: 50px 42px;
+        width: 420px;
+        text-align: center;
+        box-shadow:
+          0 25px 60px rgba(0, 0, 0, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      }
+
+      .cart-icon {
+        font-size: 60px;
+        display: block;
+        animation: cartBounce 2s ease infinite;
+        margin-bottom: 12px;
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+      }
+
+      @keyframes cartBounce {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-5deg);
+        }
+        50% {
+          transform: translateY(-12px) rotate(5deg);
+        }
+      }
+
+      h2 {
+        color: white;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        margin-bottom: 4px;
+      }
+
+      .sub {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+        margin-bottom: 28px;
+      }
+
+      .stats {
+        display: flex;
+        justify-content: space-around;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 14px 10px;
+        margin-bottom: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .stat-item .num {
+        font-size: 22px;
+        font-weight: 900;
+        color: #feca57;
+        text-shadow: 0 0 20px rgba(254, 202, 87, 0.6);
+      }
+      .stat-item .lbl {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .field {
+        text-align: left;
+        margin-bottom: 16px;
+      }
+      .field label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.8);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+      }
+      .field input {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 12px;
+        color: white;
+        font-size: 15px;
+        transition: all 0.3s;
+      }
+      .field input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .field input:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.22);
+        border-color: #feca57;
+        box-shadow: 0 0 0 3px rgba(254, 202, 87, 0.2);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 16px;
+        margin-top: 10px;
+        background: linear-gradient(135deg, #f093fb, #f5576c, #fda085);
+        background-size: 200%;
+        border: none;
+        border-radius: 14px;
+        color: white;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        cursor: pointer;
+        box-shadow: 0 8px 30px rgba(245, 87, 108, 0.5);
+        transition: all 0.3s;
+        animation: bgMove 3s ease infinite;
+      }
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
+      }
+
+      #errMsg {
+        display: none;
+        margin-top: 14px;
+        padding: 10px 14px;
+        background: rgba(255, 80, 80, 0.2);
+        border: 1px solid rgba(255, 80, 80, 0.4);
+        border-radius: 10px;
+        color: #ffaaaa;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Glow -->
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="glow g3"></div>
+
+    <!-- Floating Products — Real database products -->
+    <div class="product p1">
+      <span class="emoji">💻</span>
+      <span class="label">Laptop</span>
+    </div>
+    <div class="product p2">
+      <span class="emoji">📱</span>
+      <span class="label">Smartphone</span>
+    </div>
+    <div class="product p3">
+      <span class="emoji">🎧</span>
+      <span class="label">Headphones</span>
+    </div>
+    <div class="product p4">
+      <span class="emoji">⌚</span>
+      <span class="label">Smart Watch</span>
+    </div>
+    <div class="product p5">
+      <span class="emoji">🔊</span>
+      <span class="label">BT Speaker</span>
+    </div>
+    <div class="product p6">
+      <span class="emoji">👕</span>
+      <span class="label">T-Shirt</span>
+    </div>
+    <div class="product p7">
+      <span class="emoji">👗</span>
+      <span class="label">Kurti</span>
+    </div>
+    <div class="product p8">
+      <span class="emoji">👟</span>
+      <span class="label">Sneakers</span>
+    </div>
+    <div class="product p9">
+      <span class="emoji">📚</span>
+      <span class="label">Python Book</span>
+    </div>
+    <div class="product p10">
+      <span class="emoji">🍳</span>
+      <span class="label">Air Fryer</span>
+    </div>
+    <div class="product p11">
+      <span class="emoji">🏏</span>
+      <span class="label">Cricket Bat</span>
+    </div>
+    <div class="product p12">
+      <span class="emoji">🧴</span>
+      <span class="label">Perfume</span>
+    </div>
+
+    <!-- Login Card -->
+    <div class="card">
+      <span class="cart-icon">🛒</span>
+      <h2>Sales Analytics</h2>
+      <p class="sub">E-Commerce Intelligence Dashboard</p>
+
+      <div class="stats">
+        <div class="stat-item">
+          <div class="num">1000+</div>
+          <div class="lbl">Orders</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">200+</div>
+          <div class="lbl">Customers</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">30+</div>
+          <div class="lbl">Products</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>👤 Username</label>
+        <input type="text" id="username" placeholder="Enter your username" />
+      </div>
+      <div class="field">
+        <label>🔒 Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+        />
+      </div>
+
+      <button class="btn" onclick="doLogin()">🚀 LOGIN</button>
+      <div id="errMsg">❌ Invalid username or password!</div>
+    </div>
+
+    <script>
+      function doLogin() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        if (!username || !password) {
+          document.getElementById("errMsg").style.display = "block";
+          document.getElementById("errMsg").textContent =
+            "⚠️ Please fill all fields!";
+          return;
+        }
+        fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.success) {
+              localStorage.setItem("token", data.token); // ← ADD
+              localStorage.setItem("username", data.username); // ← ADD
+              localStorage.setItem("role", data.role); // ← ADD
+              localStorage.setItem("name", data.name); // ← ADD
+              localStorage.setItem("loginTime", Date.now()); // ← ADD
+              window.location.href = "/dashboard";
+            } else {
+              document.getElementById("errMsg").style.display = "block";
+              document.getElementById("errMsg").textContent =
+                "❌ Invalid username or password!";
+            }
+          });
+      }
+      document.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") doLogin();
+      });
+    </script>
+  </body>
+</html>
